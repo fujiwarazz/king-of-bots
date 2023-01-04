@@ -1,0 +1,38 @@
+server:
+  port: 6666
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  profiles:
+    active: dev
+  application:
+    name: kob-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/guli_school?serverTimezone=GMT%2B8
+    username: root
+    password: zzhzzhzzh1
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    #逻辑删除字段
+    db-config:
+      logic-delete-field: isDeleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: auto
+  mapper-locations:
+    - classpath:com/peels/eduService/mapper/xml/*.xml
+
+aliyun:
+  oss:
+    file:
+      endpoint: oss-cn-hangzhou.aliyuncs.com
+      keyid: LTAI5tBkx5yHPJtJc2maaoj7
+      keysecret: ah70DssneljMByNzla1oo0Gs2AqldB
+      bucketname: learning-glxy-images
