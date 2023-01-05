@@ -12,7 +12,7 @@ import java.io.IOException;
  * @create 04/01/2023 20:36
  */
 @Configuration
-public class CrosFilter implements Filter {
+public class CorsFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;

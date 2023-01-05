@@ -1,25 +1,76 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import dashbord from '@/views/dashbord/dashbordView.vue'
+import combat from '@/views/combat/combatView.vue'
+import record from '@/views/record/recordView.vue'
+import rank from '@/views/rank/rankView.vue'
+import userBot from '@/views/user/bots/botsView.vue'
+import userProfile from '@/views/user/profile/profileView.vue'
+import notFound from '@/views/error/notFound.vue'
+
+import nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path:'/',
+    name:'index',
+    redirect:'home',
+    meta:{
+      icon:'indeex'
+    }
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path:'/home',
+    name:'dashbord',
+    component: dashbord
+  },
+  {
+    path:'/combat',
+    name:'combat',
+    component:combat
+  },
+  {
+    path:'/record',
+    name:'record',
+    component:record
+  },
+  {
+    path:'/rank',
+    name:'rank',
+    component:rank
+  },
+  {
+    path:'/user/bot',
+    name:'userBot',
+    component:userBot
+  },
+  {
+    path:'/user/profile',
+    name:'userProfile',
+    component:userProfile
+  },
+  {
+    path:'/404',
+    name:'not found',
+    component:notFound
+  },
+  {
+    path:'/:catchAll(.*)',
+    redirect:'404'
   }
+ 
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
+router.beforeEach((to, from, next) => {
+  nprogress.start()
+  next()
+})
 
+router.afterEach(() => {
+  nprogress.done()
+})
 export default router

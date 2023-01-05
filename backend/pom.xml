@@ -4,9 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>backend-core</module>
         <module>kob-core</module>
+        <module>kob-slave</module>
     </modules>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -142,11 +143,7 @@
                 <version>${aliyun-java-sdk-vod.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.aliyun</groupId>
-                <artifactId>aliyun-sdk-vod-upload</artifactId>
-                <version>${aliyun-sdk-vod-upload.version}</version>
-            </dependency>
+
 
             <dependency>
                 <groupId>com.alibaba</groupId>
