@@ -1,5 +1,5 @@
 <template>
-  <div ref="parent" class="gameMap">
+  <div @keypress.space="refresh" ref="parent" class="gameMap">
     <canvas ref="canvas" tabindex="0"></canvas>
   </div>
 </template>
@@ -15,10 +15,14 @@ export default {
     onMounted(() => {
       new GameMap(canvas.value.getContext("2d"), parent.value);
     });
-   
+    let refresh = () =>{
+      new GameMap(canvas.value.getContext("2d"), parent.value);
+ 
+    }
     return {
       parent,
       canvas
+    ,refresh
     };
   },
 };

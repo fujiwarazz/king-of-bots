@@ -1,0 +1,42 @@
+2023-01-06 21:15:55.701  WARN 21768 --- [main] ory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/D:/Java_enviroment/apache-maven-3.8.5/maven-repo/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+	jar:file:/D:/Java_enviroment/apache-maven-3.8.5/maven-repo/org/json/json/20170516/json-20170516.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+2023-01-06 21:15:55.716  INFO 21768 --- [main] test                                     : Starting test on DESKTOP-NHCF73Q with PID 21768 (started by 27365 in D:\courseDesign\hmtt-workspace\kob\kob-backend\kob-core)
+2023-01-06 21:15:55.717  INFO 21768 --- [main] test                                     : No active profile set, falling back to default profiles: default
+2023-01-06 21:15:56.493  INFO 21768 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-01-06 21:15:56.498  INFO 21768 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-01-06 21:15:56.539  INFO 21768 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25ms. Found 0 Redis repository interfaces.
+2023-01-06 21:15:59.558  INFO 21768 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2023-01-06 21:16:00.467  INFO 21768 --- [main] test                                     : Started test in 5.151 seconds (JVM running for 6.61)
+2023-01-06 21:16:00.802  INFO 21768 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-01-06 21:16:01.332  INFO 21768 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-01-06 21:16:01.441  INFO 21768 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2023-01-06 21:16:01.442  INFO 21768 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-01-06 21:16:01.649  INFO 21768 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-01-06 21:16:19.582  WARN 11612 --- [main] ory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/D:/Java_enviroment/apache-maven-3.8.5/maven-repo/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+	jar:file:/D:/Java_enviroment/apache-maven-3.8.5/maven-repo/org/json/json/20170516/json-20170516.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+2023-01-06 21:16:19.596  INFO 11612 --- [main] test                                     : Starting test on DESKTOP-NHCF73Q with PID 11612 (started by 27365 in D:\courseDesign\hmtt-workspace\kob\kob-backend\kob-core)
+2023-01-06 21:16:19.597  INFO 11612 --- [main] test                                     : No active profile set, falling back to default profiles: default
+2023-01-06 21:16:20.367  INFO 11612 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-01-06 21:16:20.371  INFO 11612 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-01-06 21:16:20.418  INFO 11612 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 31ms. Found 0 Redis repository interfaces.
+2023-01-06 21:16:23.260  INFO 11612 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2023-01-06 21:16:24.141  INFO 11612 --- [main] test                                     : Started test in 4.882 seconds (JVM running for 6.197)
+2023-01-06 21:16:24.420  INFO 11612 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-01-06 21:16:24.928  INFO 11612 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-01-06 21:16:25.032  INFO 11612 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2023-01-06 21:16:25.033  INFO 11612 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-01-06 21:16:25.042  INFO 11612 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

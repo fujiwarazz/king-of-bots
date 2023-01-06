@@ -20,7 +20,7 @@ export class GameMap extends GameObject {
         this.rows = 13;
 
         this.barriers = [];
-        this.inner_walls_count = number?number:20;
+        this.inner_walls_count = number?number:50;
 
         this.snakes = [
             new Snake({id:0,color:"#4876EC",r:this.rows-2,c:1},this),
@@ -145,6 +145,7 @@ export class GameMap extends GameObject {
             else if(e.key =='ArrowRight') snake1.set_direction(1);
             else if(e.key=='ArrowDown') snake1.set_direction(2);
             else if(e.key=='ArrowLeft') snake1.set_direction(3);
+
         });
     }
 
