@@ -34,19 +34,18 @@ public class StpLoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.debug("Token:" + StpUtil.getTokenInfo());
-        System.out.println("进入了");
-        System.out.println("xxxxxxxxxxxxxxxxxxxxxx");
         try {
-
-
-            Long loginId = Long.parseLong(StpUtil.getLoginId().toString());
-            System.out.println(loginId);
-            User byId = userMapper.selectById(loginId);
-
-      //      UserContextHolder.setUser(byId);
-           // System.out.println(byId);
+            if(StpUtil.isLogin()){
+                Long loginId = Long.parseLong(StpUtil.getLoginId().toString());
+                System.out.println("token:-------------------");
+                System.out.println(StpUtil.getLoginIdByToken(StpUtil.getTokenValue()));
+                System.out.println("-------------------");
+                System.out.println(loginId);
+                User byId = userMapper.selectById(loginId);
+                UserContextHolder.setUser(byId);
+            }
             // 若在长期有效期内，则自动续签临时和长久有效期
-            if (StpUtil.getTokenTimeout() > 0) {
+            if (StpUtil.getTokenInfo()!=null && StpUtil.getTokenTimeout() > 0) {
                 // 长时间无操作，视为重新登录
                 if (StpUtil.getTokenActivityTimeout() < 0) {
                     log.debug("Request re login, Log login");
@@ -57,6 +56,10 @@ public class StpLoginInterceptor implements HandlerInterceptor {
                 StpUtil.updateLastActivityToNow();
                 // 续签长时有效期
                 StpUtil.renewTimeout(renewTimeout);
+                System.out.println("-----------------------");
+                System.out.println("续签--");
+                log.info("token:[{}]续签成功!",StpUtil.getTokenInfo().getTokenValue());
+                System.out.println("-----------------------");
                 log.debug("Request is Login, refresh activity token");
             }
         } catch (Exception e) {

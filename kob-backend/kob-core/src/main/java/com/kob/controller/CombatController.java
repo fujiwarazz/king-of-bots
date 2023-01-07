@@ -7,5 +7,5 @@ import org.springframework.web.bind.annotation.RestController;
  * @create 06/01/2023 11:16
  */
 @RestController
-public class combatController {
+public class CombatController {
 }

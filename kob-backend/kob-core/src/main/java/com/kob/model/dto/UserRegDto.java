@@ -9,10 +9,10 @@ import lombok.Data;
  */
 @Data
 public class UserRegDto  {
-    String nickname;
-    String password;
-    String email;
-
+   private String username;
+   private String password;
+   private String email;
+   private String avatar;
     public boolean checkEmail(){
         String reg = "\\w{1,}@(\\w+\\.)+\\w+";
         return this.email.matches(reg);

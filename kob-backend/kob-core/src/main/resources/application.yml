@@ -44,7 +44,7 @@ mybatis-plus:
 
 sa-token:
   # token名称 (同时也是cookie名称)
-  token-name: kob-token
+  token-name: kob_token
   # token有效期，单位s 默认7天, -1代表永不过期
   timeout: 604800 # 60s*60m*24h*7d
   # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
@@ -67,3 +67,11 @@ logging:
     path: ./log/
   level:
     com.kob: debug
+
+aliyun:
+  oss:
+    avatar:
+      endpoint: oss-cn-hangzhou.aliyuncs.com
+      keyid: LTAI5tBkx5yHPJtJc2maaoj7
+      keysecret: ah70DssneljMByNzla1oo0Gs2AqldB
+      bucketname: learning-glxy-images

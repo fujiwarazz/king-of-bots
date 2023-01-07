@@ -5,6 +5,7 @@ import com.kob.model.dto.UserLoginDto;
 import com.kob.model.dto.UserRegDto;
 import com.kob.model.entity.User;
 import com.kob.util.ResponseResult;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,4 +27,6 @@ public interface IUserService extends IService<User> {
     ResponseResult<?> handleRegister(UserRegDto userRegDto);
 
     ResponseResult<?> getInfoByToken();
+
+    ResponseResult<?> uploadUserAvatar(MultipartFile file);
 }

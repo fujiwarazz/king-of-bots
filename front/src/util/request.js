@@ -10,24 +10,22 @@ const request = axios.create({
 request.interceptors.request.use(config => {
     config.headers['Content-Type'] = 'application/json'
 
-    let token_value =""
-
+    let token_value=null;
     if(localStorage.getItem('token')){
         token_value = JSON.parse(localStorage.getItem('token'))
     }else if(sessionStorage.getItem('token')){
         token_value = JSON.parse(sessionStorage.getItem('token'))
     }
     if(token_value!=null){
-        config.headers['kob-token']=token_value
+        config.headers['kob_token']=token_value
     }
-    console.log(token_value);
     return config;
 }, error => {
     return Promise.reject(error);
 })
 
 request.interceptors.response.use(function (response) {
-
+  
     return response.data;
 }, function (error) {
     return Promise.reject(error);

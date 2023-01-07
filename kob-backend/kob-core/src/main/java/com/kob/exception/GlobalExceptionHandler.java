@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler
-    public SaResult handlerException(Exception e) {
+    public ResponseResult<?> handlerException(Exception e) {
         e.printStackTrace();
-        return SaResult.error(e.getMessage());
+        return ResponseResult.errorResult(444,e.getMessage());
     }
     @ExceptionHandler(NotLoginException.class)
     public ResponseResult<?> handlerNotLoginException(NotLoginException nle)

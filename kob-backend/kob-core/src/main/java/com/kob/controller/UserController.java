@@ -8,6 +8,7 @@ import com.kob.service.IUserService;
 import com.kob.util.Base64Utils;
 import com.kob.util.ResponseResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -29,9 +30,14 @@ public class UserController {
         return userService.handleRegister(userRegDto);
     }
 
+    @PostMapping("/account/avatar")
+    public ResponseResult<?> uploadAvatar(@RequestParam("avatar") MultipartFile file){
+        return userService.uploadUserAvatar(file);
+    }
+
     @PostMapping("/account/token")
     public ResponseResult<?> getTokenInfo(){
-        return ResponseResult.okResult(StpUtil.getTokenInfo().getTokenValue());
+        return ResponseResult.okResult();
     }
 
     @PostMapping("/login")
@@ -39,10 +45,14 @@ public class UserController {
         return userService.handleLogin(userLoginDto,request);
     }
 
-    @CrossOrigin("*")
     @GetMapping("/account/info")
     public ResponseResult<?> getInfoByToken(){
         return userService.getInfoByToken();
     }
 
+    @PostMapping("/account/logout")
+    public ResponseResult<?> logout(){
+        StpUtil.logout();
+        return ResponseResult.okResult();
+    }
 }
