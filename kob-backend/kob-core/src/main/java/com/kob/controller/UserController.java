@@ -33,6 +33,7 @@ public class UserController {
     public ResponseResult<?> getTokenInfo(){
         return ResponseResult.okResult(StpUtil.getTokenInfo().getTokenValue());
     }
+
     @PostMapping("/login")
     public ResponseResult<?> login(@RequestBody UserLoginDto userLoginDto, HttpServletRequest request){
         return userService.handleLogin(userLoginDto,request);

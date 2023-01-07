@@ -11,6 +11,8 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import status from './assets/scripts/status'
+import Antd from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
 
 const vuetify = createVuetify({
     components,
@@ -18,6 +20,6 @@ const vuetify = createVuetify({
 })
 
 const app = createApp(App).use(router).use(store).use(ElementPlus)
-.use(vuetify)
+.use(vuetify).use(Antd)
 app.config.globalProperties.$status = status
 app.mount('#app')
