@@ -6,6 +6,8 @@ import rank from '@/views/rank/rankView.vue'
 import userBot from '@/views/user/bots/botsView.vue'
 import userProfile from '@/views/user/profile/profileView.vue'
 import notFound from '@/views/error/notFound.vue'
+import UserLogin from '@/views/user/account/UserLogin.vue'
+import UserRegister from '@/views/user/account/UserRegister.vue'
 
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -49,6 +51,17 @@ const routes = [
     name:'userProfile',
     component:userProfile
   },
+  {
+    path:'/user/account/login',
+    name:'userLogin',
+    component:UserLogin
+  },
+  {
+    path:'/user/account/register',
+    name:'userRegister',
+    component:UserRegister
+  },
+
   {
     path:'/404',
     name:'not found',

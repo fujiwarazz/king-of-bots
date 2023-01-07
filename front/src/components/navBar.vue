@@ -31,7 +31,7 @@
           <ul class="navbar-nav ">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle"  
-              aria-current="page" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">peelsannaw</a>
+              aria-current="page" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">{{nickName}}</a>
  
           <ul class="dropdown-menu">
             <li><router-link class="dropdown-item"  :class="name == 'userBot'? 'nav-link active':'nav-link'"  :to="{name:'userBot'}">myBots</router-link></li>
@@ -49,13 +49,23 @@
 
 <script>
 import { useRoute } from 'vue-router'
-import { computed } from 'vue';
+import { computed ,ref} from 'vue';
 export default {
  setup(){
   let route = useRoute();
   let name = computed(()=>route.name)
+  let nickName = ref('')
+  if(localStorage.getItem('user')!=null){
+    nickName.value = JSON.parse(localStorage.getItem('user')).nickname
+  }else if(sessionStorage.getItem('user')!=null){
+    nickName.value = JSON.parse(sessionStorage.getItem('user')).nickname
+  }else{
+    nickName.value ="游客"
+  }
+
   return{
-    name
+    name,
+    nickName
   }
  }
 };

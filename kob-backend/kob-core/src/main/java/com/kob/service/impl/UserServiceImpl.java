@@ -2,6 +2,7 @@ package com.kob.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kob.annotation.Prevent;
@@ -81,27 +82,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             System.out.println(StpUtil.getLoginType());
             UserInfoVo userInfoVo = new UserInfoVo();
             userInfoVo.setUserId(user.getId());
-            userInfoVo.setToken(StpUtil.getTokenValue());
-            userInfoVo.setNickname(user.getNickname());
-            userInfoVo.setAvatar(user.getAvatar());
-            return ResponseResult.okResult(userInfoVo);
+
+            return ResponseResult.okResult(StpUtil.getTokenValue());
         } catch (Exception e) {
             return ResponseResult.errorResult(AppHttpCodeEnum.SERVER_ERROR);
         }
     }
 
     @Override
-    @Transactional
+    @Prevent(value = "30")
+    @Transactional(rollbackFor = Exception.class)
     public ResponseResult<?> handleRegister(UserRegDto userRegDto) {
         String nickname = userRegDto.getNickname();
         String password = userRegDto.getPassword();
         String email = userRegDto.getEmail();
-        if(nickname==null || password==null){
+        if(nickname==null || password==null || StrUtil.isBlank(nickname) || StrUtil.isBlank(password)){
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
         User user = new User();
         user.setNickname(nickname);
-        user.setPassword(password);
+        String encryptPassword = Base64Utils.encode((password + Base64Utils.DEFAULT_SALT).getBytes(StandardCharsets.UTF_8));
+        user.setPassword(encryptPassword);
         if(userMapper.selectOne(Wrappers.lambdaQuery(User.class).eq(User::getNickname,nickname))!=null){
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID.getCode(),"此用户已存在!");
         }else{

@@ -1,6 +1,7 @@
 package com.kob.config.stp;
 
 import cn.dev33.satoken.interceptor.SaInterceptor;
+import cn.dev33.satoken.router.SaHttpMethod;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
 import com.kob.interceptor.StpLoginInterceptor;
@@ -30,7 +31,15 @@ public class StpApiConfig implements WebMvcConfigurer {
         registry.addInterceptor(stpLoginInterceptor).addPathPatterns("/**");
         // 注册路由拦截器，自定义认证规则
         registry.addInterceptor(new SaInterceptor(handler -> {
+            SaRouter.match(SaHttpMethod.OPTIONS).stop();
 
+            SaRouter.match("/**", r -> {
+                RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+                HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+                assert request != null;
+                log.info("当前请求url:[{}]",request.getRequestURL());
+                log.info("当前请求token:[{}]",request.getHeader("kob-token"));
+            });
 
             SaRouter
                     .match("/**")    // 拦截的 path 列表，可以写多个 */
@@ -48,12 +57,7 @@ public class StpApiConfig implements WebMvcConfigurer {
             SaRouter.match("/comment/**", r -> StpUtil.checkPermission("comment"));
 
             // 甚至你可以随意的写一个打印语句
-            SaRouter.match("/**", r -> {
-                RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-                HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-                assert request != null;
-                log.info("当前请求url:[{}]",request.getRequestURL());
-            });
+
 
             // 连缀写法
             SaRouter.match("/**").check(r -> System.out.println("----啦啦啦----"));

@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author peelsannaw
@@ -72,7 +73,7 @@ public class PreventAop {
 
         String resp = stringRedisTemplate.opsForValue().get(methodFullName + base64Str);
         if (resp == null || resp.length() == 0) {
-            stringRedisTemplate.opsForValue().set(methodFullName +base64Str, reqStr, expire);
+            stringRedisTemplate.opsForValue().set(methodFullName +base64Str, reqStr, expire, TimeUnit.SECONDS);
         } else {
             String msg = preventAnno.message() == null || preventAnno.message().length() == 0
                     ? expire + "秒内不允许重复请求!" : preventAnno.message();
