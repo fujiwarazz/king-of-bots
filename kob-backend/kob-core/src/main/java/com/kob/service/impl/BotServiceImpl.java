@@ -39,6 +39,7 @@ public class BotServiceImpl extends ServiceImpl<BotMapper, Bot> implements IBotS
     @Override
     @Transactional(rollbackFor = MysqlDataTruncation.class)
     public ResponseResult<?> addBot(BotAddDto botAddDto) {
+        System.out.println(botAddDto);
         if(StrUtil.isBlank(botAddDto.getCode()) ){
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID.getCode(),"代码不为空!");
         }
@@ -47,16 +48,16 @@ public class BotServiceImpl extends ServiceImpl<BotMapper, Bot> implements IBotS
         }
         try {
             if( StrUtil.isBlank(botAddDto.getDescription())){
-                botAddDto.setDescription("这个人很烂,连描述也不写~");
+                botAddDto.setDescription("这个人很懒,连描述也不写~");
             }
             Bot bot = new Bot();
             bot.setBTitle(botAddDto.getTitle());
             bot.setBDesc(botAddDto.getDescription());
             bot.setBCode(botAddDto.getCode());
             bot.setKId(StpUtil.getLoginIdAsLong());
-            if(botAddDto.getIsOpen()!=null){
-                bot.setBIsOpen(botAddDto.getIsOpen());
-            }
+
+            bot.setBIsOpen(botAddDto.getIsOpen().equals(Boolean.TRUE)?1:0);
+
             this.save(bot);
             return ResponseResult.okResult();
         } catch (Exception e) {
@@ -88,20 +89,27 @@ public class BotServiceImpl extends ServiceImpl<BotMapper, Bot> implements IBotS
     }
 
     @Override
-    @Prevent("30")
+//    @Prevent("30")
     @Transactional(rollbackFor = MysqlDataTruncation.class)
     public ResponseResult<?> updateBot(BotUpdateDto botUpdateDto) {
         try {
-            if(StrUtil.isBlank(botUpdateDto.getBTitle()) ||StrUtil.isBlank(botUpdateDto.getBCode())) {
+            if(StrUtil.isBlank(botUpdateDto.getTitle()) ||StrUtil.isBlank(botUpdateDto.getCode())) {
                 return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
             }
-            if(this.getById(botUpdateDto.getBId())==null){
+            if(this.getById(botUpdateDto.getId())==null){
                 return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID.getCode(),"没有这个Bot!");
             }
-            if(!botUpdateDto.getKId().equals(StpUtil.getLoginIdAsLong())){
+            if(!botUpdateDto.getUserId().equals(StpUtil.getLoginIdAsLong())){
                 return ResponseResult.errorResult(114514,"这不是您的bot!");
             }
-            this.updateById(botUpdateDto);
+            Bot bot = new Bot();
+            bot.setBIsOpen(botUpdateDto.getIsOpen().equals(Boolean.TRUE)?1:0);
+            bot.setKId(botUpdateDto.getUserId());
+            bot.setBId(botUpdateDto.getId());
+            bot.setBDesc(botUpdateDto.getDescription());
+            bot.setBCode(botUpdateDto.getCode());
+            bot.setBTitle(botUpdateDto.getTitle());
+            this.updateById(bot);
             return ResponseResult.okResult();
         } catch (Exception e) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID.getCode(),"请检查参数是否过长!");
@@ -117,6 +125,9 @@ public class BotServiceImpl extends ServiceImpl<BotMapper, Bot> implements IBotS
             return ResponseResult.errorResult(1919810,"你小子想干啥?");
         }
         List<Bot> list = this.list(Wrappers.lambdaQuery(Bot.class).eq(Bot::getKId, id));
+        list.forEach(item->{
+            item.setIsOpen(item.getBIsOpen() == 1);
+        });
         return ResponseResult.okResult(list);
     }
 }

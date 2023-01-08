@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -47,11 +48,9 @@ public class Bot implements Serializable {
     private Integer bRating;
 
     @TableField(value = "create_time",fill = FieldFill.INSERT)
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date createTime;
 
     @TableField(value = "update_time",fill = FieldFill.INSERT_UPDATE)
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date updateTime;
 
     @ApiModelProperty("是否公开")
@@ -61,5 +60,13 @@ public class Bot implements Serializable {
     @ApiModelProperty("1:表示正常使用 2:表示停用")
     @TableField(value = "b_status")
     private Integer bStatus;
+
+    @TableField(value = "b_language")
+    private String bLanguage;
+
+    @TableField(exist = false)
+    private Boolean isOpen;
+
+
 
 }

@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import ModuleUser from './user'
+import ModuleCombat from './combat'
 export default createStore({
   state: {
   },
@@ -10,6 +11,7 @@ export default createStore({
   actions: {
   },
   modules: {
-    user:ModuleUser
+    user:ModuleUser,
+    combat:ModuleCombat
   }
 })

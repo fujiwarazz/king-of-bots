@@ -118,7 +118,7 @@ export class Snake extends GameObject {
 
         ctx.fillStyle = this.color;
         if (this.status === "die") {
-
+           
             ctx.fillStyle = 'white'
         }
         for (let cell of this.cells) {

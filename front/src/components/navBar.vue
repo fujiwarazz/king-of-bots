@@ -138,7 +138,6 @@ export default {
       } else if (sessionStorage.getItem("user") != null) {
         nickName.value = JSON.parse(sessionStorage.getItem("user")).nickname;
       } 
-      console.log(nickName.value)
     });
     let name = computed(() => route.name);
 

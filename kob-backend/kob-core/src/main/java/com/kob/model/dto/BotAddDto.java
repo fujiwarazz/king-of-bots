@@ -14,6 +14,6 @@ public class BotAddDto {
     private String description;
     private String code;
     private String title;
-    private Integer isOpen;
+    private Boolean isOpen;
 
 }

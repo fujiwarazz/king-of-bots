@@ -37,10 +37,6 @@ public class StpLoginInterceptor implements HandlerInterceptor {
         try {
             if(StpUtil.isLogin()){
                 Long loginId = Long.parseLong(StpUtil.getLoginId().toString());
-                System.out.println("token:-------------------");
-                System.out.println(StpUtil.getLoginIdByToken(StpUtil.getTokenValue()));
-                System.out.println("-------------------");
-                System.out.println(loginId);
                 User byId = userMapper.selectById(loginId);
                 UserContextHolder.setUser(byId);
             }
@@ -55,11 +51,7 @@ public class StpLoginInterceptor implements HandlerInterceptor {
                 // 续签临时有效期
                 StpUtil.updateLastActivityToNow();
                 // 续签长时有效期
-                StpUtil.renewTimeout(renewTimeout);
-                System.out.println("-----------------------");
-                System.out.println("续签--");
-                log.info("token:[{}]续签成功!",StpUtil.getTokenInfo().getTokenValue());
-                System.out.println("-----------------------");
+                log.debug("token:[{}]续签成功!",StpUtil.getTokenInfo().getTokenValue());
                 log.debug("Request is Login, refresh activity token");
             }
         } catch (Exception e) {

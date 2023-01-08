@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import router from '../router'
 // 创建axios
 const request = axios.create({
     
@@ -25,7 +25,14 @@ request.interceptors.request.use(config => {
 })
 
 request.interceptors.response.use(function (response) {
-  
+    if(response.data.code===1){
+        localStorage.removeItem('user')
+        localStorage.removeItem('token')
+        sessionStorage.removeItem('user')
+        sessionStorage.removeItem('token')
+
+        router.push("/user/account/login")
+    }
     return response.data;
 }, function (error) {
     return Promise.reject(error);

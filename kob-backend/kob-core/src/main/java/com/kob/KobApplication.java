@@ -11,5 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class KobApplication {
     public static void main(String[] args) {
         SpringApplication.run(KobApplication.class,args);
+
     }
 }

@@ -4,9 +4,14 @@ import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaHttpMethod;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.kob.interceptor.StpLoginInterceptor;
 import com.kob.util.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.reactive.filter.OrderedHiddenHttpMethodFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +26,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.TimeZone;
 
 /**
  * @Author peelsannaw
@@ -33,12 +41,35 @@ public class StpApiConfig implements WebMvcConfigurer {
     public OrderedHiddenHttpMethodFilter hiddenHttpMethodFilter() {
         return new OrderedHiddenHttpMethodFilter();
     }
-    @Bean
-    public HttpMessageConverter h() {
-        MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
-        mappingJackson2HttpMessageConverter.setObjectMapper(new JacksonObjectMapper());
-        return mappingJackson2HttpMessageConverter;
+
+    @Value("${spring.jackson.date-format}")
+    private String dateFormatPattern;
+
+    @Value("${spring.jackson.time-zone}")
+    private String timeZone;
+
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        ObjectMapper objectMapper = converter.getObjectMapper();
+        // 生成JSON时,将所有Long转换成String
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        objectMapper.registerModule(simpleModule);
+        // 时间格式化
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        //这个可以引用spring boot yml 里的格式化配置和时区配置
+        objectMapper.setDateFormat(new SimpleDateFormat(dateFormatPattern));
+        objectMapper.setTimeZone(TimeZone.getTimeZone(timeZone));
+        // 设置格式化内容
+        converter.setObjectMapper(objectMapper);
+        converters.add(0, converter);
+
+
     }
+
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         //添加映射路径
@@ -59,10 +90,11 @@ public class StpApiConfig implements WebMvcConfigurer {
     StpLoginInterceptor stpLoginInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(stpLoginInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(stpLoginInterceptor).addPathPatterns("/**").excludePathPatterns("/ws/**");
         // 注册路由拦截器，自定义认证规则
         registry.addInterceptor(new SaInterceptor(handler -> {
             SaRouter.match(SaHttpMethod.OPTIONS).match("/**").stop();
+            SaRouter.match("/ws/**").stop();
             SaRouter.match("/**", r -> {
                 RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
                 assert requestAttributes != null;

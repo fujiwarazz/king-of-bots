@@ -1,24 +1,21 @@
 <template>
-    <contentFiled>
-        dashbord
-    </contentFiled>
+  <div class="container" style="background-color: red;">
+    <div class="row">
+      <div class="col-9">123</div>
+      <div class="col-3">123</div>
+    </div>
+  </div>
 </template>
 
 <script>
-import contentFiled from '@/components/contentFiled.vue'
 
 export default {
-    components:{
-        contentFiled
-    },
-    setup () {
-        
-
-        return {}
-    }
-}
+  components: {
+  },
+  setup() {
+    return {};
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -36,7 +36,7 @@ public class BotController {
         return botService.removeBot(id);
     }
 
-    @PostMapping("updateBot")
+    @PostMapping("/updateBot")
     public ResponseResult<?>updateBot(@RequestBody BotUpdateDto botUpdateDto){
         return botService.updateBot(botUpdateDto);
     }
