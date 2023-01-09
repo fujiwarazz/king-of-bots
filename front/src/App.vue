@@ -1,18 +1,28 @@
 <template>
   <navBar/>
-  <router-view/>
+  <router-view v-if="isRouterAlive"/>
 </template>
 <script>
 import navBar from '@/components/navBar.vue'
 // import request from './util/request'
-// import { ref } from 'vue'
+import { ref ,provide,nextTick} from 'vue'
 export default {
   components:{
     navBar
   },
   name:'app',
   setup(){
-   
+    const isRouterAlive = ref(true);
+    const reload = () => {
+      isRouterAlive.value = false;
+      nextTick(() => {
+        isRouterAlive.value = true;
+      });
+    }; 
+    provide("reload", reload);
+    return {
+      isRouterAlive,
+    };
   }
 }
 

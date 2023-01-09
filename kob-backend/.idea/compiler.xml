@@ -8,14 +8,22 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="kob-slave" />
+        <module name="model" />
         <module name="kob-core" />
+        <module name="feign-api" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="kob-matching" target="8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="feign-api" options="-parameters" />
       <module name="kob-core" options="-parameters" />
+      <module name="kob-matching" options="-parameters" />
       <module name="kob-slave" options="-parameters" />
+      <module name="model" options="-parameters" />
     </option>
   </component>
 </project>

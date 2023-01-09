@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { ElMessage } from 'element-plus'
 import router from '../router'
 // 创建axios
 const request = axios.create({
@@ -30,8 +31,10 @@ request.interceptors.response.use(function (response) {
         localStorage.removeItem('token')
         sessionStorage.removeItem('user')
         sessionStorage.removeItem('token')
-
+        ElMessage.error("您的账号在其他地方登录!")
         router.push("/user/account/login")
+        location. reload()
+
     }
     return response.data;
 }, function (error) {

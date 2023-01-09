@@ -11,7 +11,7 @@ import lombok.Getter;
 @Data
 public class MatchingDto {
     String event;
-
+    Integer direction;
 
     @SuppressWarnings("all")
     @Getter

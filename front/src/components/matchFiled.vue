@@ -17,7 +17,7 @@
             </div>
             <div class="col-5">
                 <div class="user-avatar">
-                    <img :src="$store.state.combat.opponent_avatar" style="border:1px" alt="" />
+                    <img :src="$store.state.combat.opponent_avatar" style="border:1px" alt="" />  
                 </div>
                 <div class="user-nickname" style="color:grey">
                     {{ $store.state.combat.opponent_nickname }}

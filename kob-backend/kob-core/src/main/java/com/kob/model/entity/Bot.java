@@ -29,7 +29,7 @@ public class Bot implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "b_id",type = IdType.ASSIGN_ID)
+    @TableId(value = "b_id", type = IdType.ASSIGN_ID)
     private Long bId;
 
     @TableField(value = "k_id")
@@ -44,13 +44,10 @@ public class Bot implements Serializable {
     @TableField(value = "b_code")
     private String bCode;
 
-    @TableField(value = "b_rating")
-    private Integer bRating;
-
-    @TableField(value = "create_time",fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
-    @TableField(value = "update_time",fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     @ApiModelProperty("是否公开")
@@ -66,7 +63,6 @@ public class Bot implements Serializable {
 
     @TableField(exist = false)
     private Boolean isOpen;
-
 
 
 }

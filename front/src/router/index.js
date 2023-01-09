@@ -121,7 +121,12 @@ router.beforeEach((to, from, next) => {
         next('/user/account/login')
       }
     })
+  }else{
+    if(to.meta.needLogin == true){
+      next('/user/account/login')
+    }
   }
+  
   if(to.meta.needLogin==true && !store.state.user.is_login){
     ElMessage({
       message:'请登录!',

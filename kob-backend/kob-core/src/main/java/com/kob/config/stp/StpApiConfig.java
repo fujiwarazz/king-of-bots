@@ -90,11 +90,12 @@ public class StpApiConfig implements WebMvcConfigurer {
     StpLoginInterceptor stpLoginInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(stpLoginInterceptor).addPathPatterns("/**").excludePathPatterns("/ws/**");
+        registry.addInterceptor(stpLoginInterceptor).addPathPatterns("/**").excludePathPatterns("/ws/**","/combat/start");
         // 注册路由拦截器，自定义认证规则
         registry.addInterceptor(new SaInterceptor(handler -> {
             SaRouter.match(SaHttpMethod.OPTIONS).match("/**").stop();
             SaRouter.match("/ws/**").stop();
+            SaRouter.match("/combat/start").stop();
             SaRouter.match("/**", r -> {
                 RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
                 assert requestAttributes != null;

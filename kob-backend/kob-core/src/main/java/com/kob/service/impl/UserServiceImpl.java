@@ -120,8 +120,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public ResponseResult<?> getInfoByToken() {
+        long loginIdAsLong = StpUtil.getLoginIdAsLong();
+        User loginUser = this.getById(loginIdAsLong);
         UserInfoVo userInfoVo = new UserInfoVo();
-        User loginUser = UserContextHolder.getUserInfo();
         BeanUtil.copyProperties(loginUser,userInfoVo);
         userInfoVo.setUserId(loginUser.getId());
         userInfoVo.setAvatar(loginUser.getAvatar());

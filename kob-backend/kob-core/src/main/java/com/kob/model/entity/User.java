@@ -41,4 +41,7 @@ public class User implements Serializable {
     @TableField("avatar")
     private String avatar;
 
+    @TableField("rating")
+    private Integer rating;
+
 }

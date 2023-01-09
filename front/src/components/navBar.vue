@@ -121,7 +121,7 @@
 
 <script>
 import { useRoute, useRouter } from "vue-router";
-import { computed, ref, onMounted } from "vue";
+import { computed, ref, onMounted,inject } from "vue";
 import { useStore } from "vuex";
 export default {
   setup() {
@@ -129,9 +129,10 @@ export default {
     let router = useRouter();
     let store = useStore();
     let islogin = ref(false);
+    const refresh = inject("reload");
 
     let nickName = ref("游客");
-
+    refresh()
     onMounted(() => {
       if (localStorage.getItem("user") != null) {
         nickName.value = JSON.parse(localStorage.getItem("user")).nickname;
@@ -145,6 +146,7 @@ export default {
       store.dispatch("logout", {
         success() {
           router.push("/user/account/login");
+
         },
       });
     };
@@ -152,7 +154,7 @@ export default {
       logOut,
       name,
       nickName,
-      islogin,
+      islogin,refresh
     };
   },
 };

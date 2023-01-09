@@ -73,3 +73,9 @@ aliyun:
       keyid: LTAI5tBkx5yHPJtJc2maaoj7
       keysecret: ah70DssneljMByNzla1oo0Gs2AqldB
       bucketname: learning-glxy-images
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL

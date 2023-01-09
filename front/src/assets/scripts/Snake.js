@@ -10,7 +10,7 @@ export class Snake extends GameObject {
         //身体 cells[0]为头
         this.cells = [new Cell(info.r, info.c)];
         //蛇的速度 5格子/s
-        this.speed = 4;
+        this.speed = 5;
         this.direction = -1; // 0 1 2 3表示上右下左
         this.status = "idle";//idle: 静止 move:移动 die:死亡
         this.next_cell = null;
@@ -103,11 +103,10 @@ export class Snake extends GameObject {
             //深拷贝
             this.cells[i] = JSON.parse(JSON.stringify(this.cells[i - 1]));
         }
-        //下一步操作非法
-        if (!this.gameMap.isValid(this.next_cell)) {
-            this.status = "die";
-
-        }
+        // //下一步操作非法
+        // if (!this.gameMap.isValid(this.next_cell)) {
+        //     this.status = "die";
+        // }
 
 
     }
@@ -118,7 +117,7 @@ export class Snake extends GameObject {
 
         ctx.fillStyle = this.color;
         if (this.status === "die") {
-           
+
             ctx.fillStyle = 'white'
         }
         for (let cell of this.cells) {
@@ -140,11 +139,11 @@ export class Snake extends GameObject {
         }
 
         ctx.fillStyle = 'black';
-        for(let i = 0;i<2;i++){
-            const ex = (this.cells[0].x + this.eyes_dx[this.head_direction][i] *0.15)*L;
-            const ey = (this.cells[0].y + this.eyes_dy[this.head_direction][i] *0.15)*L;
+        for (let i = 0; i < 2; i++) {
+            const ex = (this.cells[0].x + this.eyes_dx[this.head_direction][i] * 0.15) * L;
+            const ey = (this.cells[0].y + this.eyes_dy[this.head_direction][i] * 0.15) * L;
             ctx.beginPath();
-            ctx.arc(ex,ey,L*0.06,0,Math.PI*2)
+            ctx.arc(ex, ey, L * 0.06, 0, Math.PI * 2)
             ctx.fill();
         }
 
