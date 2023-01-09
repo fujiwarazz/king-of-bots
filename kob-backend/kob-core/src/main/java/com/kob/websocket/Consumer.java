@@ -2,7 +2,9 @@ package com.kob.websocket;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.kob.constant.GameConstant;
 import com.kob.gamecore.Game;
+import com.kob.mapper.RecordsMapper;
 import com.kob.mapper.UserMapper;
 import com.kob.model.dto.MatchingDto;
 import com.kob.model.entity.User;
@@ -19,8 +21,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.*;
 
 
 /**
@@ -32,22 +33,26 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @ServerEndpoint("/ws/{token}")
 public class Consumer {
 
-    private static UserMapper userMapper;
+
+    public static UserMapper userMapper;
 
     private static StringRedisTemplate stringRedisTemplate;
 
+    public static RecordsMapper recordsMapper;
+
     private Session session = null;
 
-    private RedissonClient redissonClient;
-
     private User user;
+
+    private Game game = null;
+
 
     /**
      * 用户id与服务端
      */
-    private final static ConcurrentHashMap<Long, Consumer> USERS_LINK = new ConcurrentHashMap<Long, Consumer>();
+    public final static ConcurrentHashMap<Long, Consumer> USERS_LINK = new ConcurrentHashMap<Long, Consumer>();
 
-    private final static CopyOnWriteArrayList<User>MATCHING_POOL = new CopyOnWriteArrayList<>();
+    public final static CopyOnWriteArrayList<User>MATCHING_POOL = new CopyOnWriteArrayList<>();
 
 
     //websocket注入需要用setter
@@ -55,6 +60,11 @@ public class Consumer {
     public void setUserMapper(UserMapper userMapper) {
         Consumer.userMapper = userMapper;
     }
+    @Autowired
+    public void setRecordsMapper(RecordsMapper recordsMapper) {
+        Consumer.recordsMapper = recordsMapper;
+    }
+
 
     @Autowired
     public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
@@ -68,7 +78,7 @@ public class Consumer {
         // 建立连接
         try {
             token = token.replaceAll("\"","");
-            log.error("[{}]用户建立连接,session为:[{}]", token, session.getId());
+            log.error("[{}]用户建立连接,session为:[{}],线程为:[{}]", token, session.getId(),Thread.currentThread().getId());
             this.session = session;
 
             System.out.println("kob_token:login:last-activity:" + token);
@@ -109,13 +119,26 @@ public class Consumer {
     public void onMessage(String message, Session session) throws InterruptedException {
         // 从Client接收消息
         MatchingDto matchingDto = JSON.parseObject(message, MatchingDto.class);
-        if("start-matching".equals(matchingDto.getEvent())){
+        System.out.println(matchingDto.getEvent());
+        if(GameConstant.START_MATCHING.equals(matchingDto.getEvent())){
             handleMatching();
-        }else{
+        }else if(GameConstant.END_MATCHING.equals(matchingDto.getEvent())){
             stopMatching();
+        }else if(GameConstant.MOVE.equals(matchingDto.getEvent())){
+            move(matchingDto.getDirection());
         }
     }
 
+
+    private void move(Integer direction){
+        if(game.getPlayerA().getId().equals(this.user.getId())){
+            log.info("A:当前线程为:[{}]",Thread.currentThread().getId());
+            game.setNextStepA(direction);
+        }else if(game.getPlayerB().getId().equals(this.user.getId())){
+            log.info("B:当前线程为:[{}]",Thread.currentThread().getId());
+            game.setNextStepB(direction);
+        }
+    }
 
     @OnError
     public void onError(Session session, Throwable error) {
@@ -132,26 +155,41 @@ public class Consumer {
             MATCHING_POOL.remove(b);
 
             //生成地图
-            Game game = new Game(13,14,30);
+            Game game = new Game(13,14,30,a.getId(),b.getId());
             game.createGameMap();
 
+            USERS_LINK.get(a.getId()).game = game;
+            USERS_LINK.get(b.getId()).game = game;
 
+
+            game.start();
+
+
+            JSONObject responseGame = new JSONObject();
+            responseGame.put("a_id",game.getPlayerA().getId());
+            responseGame.put("b_id",game.getPlayerB().getId());
+            responseGame.put("a_sx",game.getPlayerA().getSx());
+            responseGame.put("a_sy",game.getPlayerA().getSy());
+            responseGame.put("b_sx",game.getPlayerB().getSx());
+            responseGame.put("b_sy",game.getPlayerB().getSy());
+            responseGame.put("map",game.getGameMap());
             //匹配成功
             JSONObject respA = new JSONObject();
             respA.put("event",MatchingDto.event.START.getName());
             respA.put("opponent_nickname",b.getNickname());
             respA.put("opponent_avatar",b.getAvatar());
             respA.put("opponent_id",b.getId());
-            respA.put("gameMap",game.getGameMap());
-            USERS_LINK.get(a.getId()).sendMsg(respA.toJSONString());
+            respA.put("gameMap",responseGame);
+
 
             JSONObject respB = new JSONObject();
             respB.put("event",MatchingDto.event.START.getName());
             respB.put("opponent_nickname",a.getNickname());
             respB.put("opponent_avatar",a.getAvatar());
             respB.put("opponent_id",a.getId());
-            respB.put("gameMap",game.getGameMap());
+            respB.put("gameMap",responseGame);
 
+            USERS_LINK.get(a.getId()).sendMsg(respA.toJSONString());
             USERS_LINK.get(b.getId()).sendMsg(respB.toJSONString());
 
             System.out.println(respA.toJSONString());
@@ -168,10 +206,8 @@ public class Consumer {
 
         }
     }
-    public void sendMsg(String message) throws InterruptedException {
-//        System.out.println("0000");
-//        System.out.println(this.session.getId());
-//        RLock lock = redissonClient.getLock(this.session.getId());
+    public void sendMsg(String message) {
+
         synchronized (this.session.getId()){
             try {
                 this.session.getBasicRemote().sendText(message);
@@ -180,17 +216,5 @@ public class Consumer {
             }
         }
 
-
-//        //分布式锁
-//        boolean isLock = lock.tryLock();
-//        try {
-//            if (isLock) {
-//                this.session.getBasicRemote().sendText(message);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            lock.unlock();
-//        }
     }
 }
