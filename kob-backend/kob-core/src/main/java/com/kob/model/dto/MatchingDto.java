@@ -12,7 +12,8 @@ import lombok.Getter;
 public class MatchingDto {
     String event;
     Integer direction;
-
+    Long bId;
+    Integer type;
     @SuppressWarnings("all")
     @Getter
     public enum event{

@@ -40,10 +40,10 @@ public class BotController {
     public ResponseResult<?>updateBot(@RequestBody BotUpdateDto botUpdateDto){
         return botService.updateBot(botUpdateDto);
     }
-
     @GetMapping("/getList/{id}")
     public ResponseResult<?>getMyBots(@PathVariable Long id){
         return botService.getMyBots(id);
     }
+
 }
 

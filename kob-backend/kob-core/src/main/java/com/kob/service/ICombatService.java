@@ -7,7 +7,7 @@ package com.kob.service;
 public interface ICombatService {
 
 
-    String startGame(Long userId1, Long userId2);
+    String startGame(Long userId1, Long userId2,Long abId,Long bbId);
 
 
 

@@ -26,6 +26,7 @@ export default {
 
     let socketUrl = `ws://127.0.0.1:9999/ws/${store.state.user.token}`;
 
+    store.commit('updateLoser','none')
     let socket = null
     onMounted(() => {
 

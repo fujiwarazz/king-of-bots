@@ -27,7 +27,7 @@ public class MatchingController implements MatchClient {
     @PostMapping("/player/add")
     public ResponseResult<?> addPlayer(PlayerMatchDto playerMatchDto) {
         log.info("接受feign调用:[{}]", JSON.toJSONString(playerMatchDto));
-        return matchingService.addPlayer(playerMatchDto.getUserId(), playerMatchDto.getRating());
+        return matchingService.addPlayer(playerMatchDto.getUserId(), playerMatchDto.getRating(),playerMatchDto.getBId(),playerMatchDto.getMatchType());
     }
 
     @Override

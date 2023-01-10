@@ -10,6 +10,7 @@
         <module name="kob-slave" />
         <module name="model" />
         <module name="kob-core" />
+        <module name="kob-BotRunning" />
         <module name="feign-api" />
       </profile>
     </annotationProcessing>
@@ -20,6 +21,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="feign-api" options="-parameters" />
+      <module name="kob-BotRunning" options="-parameters" />
       <module name="kob-core" options="-parameters" />
       <module name="kob-matching" options="-parameters" />
       <module name="kob-slave" options="-parameters" />

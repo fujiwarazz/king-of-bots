@@ -15,4 +15,6 @@ public class Player {
     private Long userId;
     private Integer rating;
     private Integer waitingTime;
+    private Long bid;
+    private Integer matchType;
 }

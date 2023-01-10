@@ -95,7 +95,7 @@ public class StpApiConfig implements WebMvcConfigurer {
         registry.addInterceptor(new SaInterceptor(handler -> {
             SaRouter.match(SaHttpMethod.OPTIONS).match("/**").stop();
             SaRouter.match("/ws/**").stop();
-            SaRouter.match("/combat/start").stop();
+            SaRouter.match("/combat/**").stop();
             SaRouter.match("/**", r -> {
                 RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
                 assert requestAttributes != null;

@@ -9,7 +9,9 @@ import lombok.Data;
 @Data
 public class PlayerMatchDto {
 
-   private Long userId;
-   private Integer rating;
+    private Long userId;
+    private Integer rating;
+    private Long bId;
+    private Integer matchType;
 }
 

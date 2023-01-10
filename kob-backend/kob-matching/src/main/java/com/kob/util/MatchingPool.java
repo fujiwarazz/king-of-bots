@@ -27,8 +27,6 @@ public class MatchingPool extends Thread {
 
     private static RestTemplate restTemplate;
 
-
-
     @Autowired
     public void setRestTemplate(RestTemplate restTemplate) {
         MatchingPool.restTemplate = restTemplate;
@@ -125,6 +123,8 @@ public class MatchingPool extends Thread {
         MultiValueMap<String,String>multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("a_id",a.getUserId().toString());
         multiValueMap.add("b_id",b.getUserId().toString());
+        multiValueMap.add("a_bid",a.getBid().toString());
+        multiValueMap.add("b_bid",b.getBid().toString());
         System.out.println(multiValueMap);
         restTemplate.postForObject(REMOTE_API,multiValueMap, String.class);
     }

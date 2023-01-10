@@ -6,15 +6,12 @@
           <div class="card-body">
             <img :src="$store.state.user.avatar" alt="" style="width: 100%" />
             <v-divider inset></v-divider>
-            <div
-              class="row"
-              style="text-align: center; font-size: 18px; font-weight: bold"
-            >
+            <div class="row" style="text-align: center; font-size: 18px; font-weight: bold">
               <el-divider content-position="right"><span color="red">
-                {{
-                $store.state.user.nickname
-              }}
-              </span></el-divider>
+                  {{
+                    $store.state.user.nickname
+                  }}
+                </span></el-divider>
             </div>
             <v-divider inset></v-divider>
           </div>
@@ -24,85 +21,46 @@
         <div class="card">
           <div class="card-header">
             <span style="font-size: 120%">我的Bots</span>
-            <v-btn
-              class="float-end"
-              variant="flat"
-              color="#409EFF"
-              data-bs-toggle="modal"
-              data-bs-target="#createBot"
-            >
+            <v-btn class="float-end" variant="flat" color="#409EFF" data-bs-toggle="modal" data-bs-target="#createBot">
               <el-icon>
                 <Position />
               </el-icon>
-              创建Bot</v-btn
-            >
+              创建Bot</v-btn>
           </div>
 
           <!-- Modal -->
-          <div
-            class="modal fade"
-            id="createBot"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
+          <div class="modal fade" id="createBot" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
               <div class="modal-content">
                 <div class="modal-header">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">在这里填入信息</h1>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" style="font-size: 16px">
                   <form>
                     <div class="mb-3">
                       <label for="botTitle" class="form-label">名称</label>
-                      <input
-                        type="email"
-                        class="form-control"
-                        id="botTitle"
-                        aria-describedby="emailHelp"
-                        placeholder="请输入bot简介"
-                        v-model="botInfo.title"
-                      />
+                      <input type="email" class="form-control" id="botTitle" aria-describedby="emailHelp"
+                        placeholder="请输入bot简介" v-model="botInfo.title" />
                       <div id="emailHelp" class="form-text">
                         给你的Bot取个好听的名字吧~
                       </div>
                     </div>
                     <div class="mb-3">
                       <label for="BotDesc" class="form-label">简介</label>
-                      <textarea
-                        type="password"
-                        class="form-control"
-                        id="BotDesc"
-                        placeholder="请输入bot简介"
-                        v-model="botInfo.description"
-                      />
+                      <textarea type="password" class="form-control" id="BotDesc" placeholder="请输入bot简介"
+                        v-model="botInfo.description" />
                     </div>
                     <div class="mb-3">
                       <label for="BotCode" class="form-label">代码</label>
                       <!-- <textarea type="password" class="form-control" id="BotCode"
                                                 placeholder="请输入代码" rows="7" v-model="botInfo.code" /> -->
 
-                      <VAceEditor
-                        v-model:value="botInfo.code"
-                        @init="editorInit"
-                        lang="c_cpp"
-                        theme="textmate"
-                        style="height: 300px"
-                      />
+                      <VAceEditor v-model:value="botInfo.code" @init="editorInit" lang="c_cpp" theme="textmate"
+                        style="height: 300px" />
                     </div>
                     <div class="mb-3 form-check">
-                      <input
-                        type="checkbox"
-                        class="form-check-input"
-                        id="open"
-                        v-model="botInfo.isOpen"
-                      />
+                      <input type="checkbox" class="form-check-input" id="open" v-model="botInfo.isOpen" />
                       <label class="form-check-label" for="open">是否公开代码</label>
                     </div>
                   </form>
@@ -118,9 +76,7 @@
           </div>
 
           <div class="card-body">
-            <table
-              class="table table-striped table-hover align-items-center justify-center"
-            >
+            <table class="table table-striped table-hover align-items-center justify-center">
               <thead>
                 <tr>
                   <th>#BotId</th>
@@ -143,62 +99,36 @@
                   </td>
 
                   <td>
-                    <el-button
-                      style="margin-right: 5px"
-                      data-bs-toggle="modal"
-                      :data-bs-target="'#updateBot' + bot.bid"
-                      type="primary"
-                      :icon="Edit"
-                      plain
-                      ><el-icon> <Edit /> </el-icon>修改</el-button
-                    >
+                    <el-button style="margin-right: 5px" data-bs-toggle="modal" :data-bs-target="'#updateBot' + bot.bid"
+                      type="primary" :icon="Edit" plain><el-icon>
+                        <Edit />
+                      </el-icon>修改</el-button>
 
                     <!-- Modal -->
-                    <div
-                      class="modal fade"
-                      :id="'updateBot' + bot.bid"
-                      tabindex="-1"
-                      aria-labelledby="exampleModalLabel"
-                      aria-hidden="true"
-                    >
+                    <div class="modal fade" :id="'updateBot' + bot.bid" tabindex="-1"
+                      aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog modal-xl">
                         <div class="modal-content">
                           <div class="modal-header">
                             <h1 class="modal-title fs-5" id="exampleModalLabel">
                               在这里填入信息
                             </h1>
-                            <button
-                              type="button"
-                              class="btn-close"
-                              data-bs-dismiss="modal"
-                              aria-label="Close"
-                            ></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
                           <div class="modal-body" style="font-size: 16px">
                             <form>
                               <div class="mb-3">
                                 <label for="botTitle" class="form-label">名称</label>
-                                <input
-                                  type="email"
-                                  class="form-control"
-                                  id="botTitle"
-                                  aria-describedby="emailHelp"
-                                  placeholder="请输入bot简介"
-                                  v-model="bot.btitle"
-                                />
+                                <input type="email" class="form-control" id="botTitle" aria-describedby="emailHelp"
+                                  placeholder="请输入bot简介" v-model="bot.btitle" />
                                 <div id="emailHelp" class="form-text">
                                   给你的Bot取个好听的名字吧~
                                 </div>
                               </div>
                               <div class="mb-3">
                                 <label for="BotDesc" class="form-label">简介</label>
-                                <textarea
-                                  type="password"
-                                  class="form-control"
-                                  id="BotDesc"
-                                  placeholder="请输入bot简介"
-                                  v-model="bot.bdesc"
-                                />
+                                <textarea type="password" class="form-control" id="BotDesc" placeholder="请输入bot简介"
+                                  v-model="bot.bdesc" />
                               </div>
                               <div class="mb-3">
                                 <label for="BotCode" class="form-label">代码</label>
@@ -211,34 +141,18 @@
                                   v-model="bot.bcode"
                                 /> -->
 
-                                <VAceEditor
-                                  v-model:value="bot.bcode"
-                                  @init="editorInit"
-                                  lang="c_cpp"
-                                  theme="textmate"
-                                  style="height: 300px"
-                                />
+                                <VAceEditor v-model:value="bot.bcode" @init="editorInit" lang="c_cpp" theme="textmate"
+                                  style="height: 300px" />
                               </div>
                               <div class="mb-3 form-check">
-                                <input
-                                  type="checkbox"
-                                  class="form-check-input"
-                                  id="open"
-                                  v-model="bot.isOpen"
-                                />
-                                <label class="form-check-label" for="open"
-                                  >是否公开代码</label
-                                >
+                                <input type="checkbox" class="form-check-input" id="open" v-model="bot.isOpen" />
+                                <label class="form-check-label" for="open">是否公开代码</label>
                               </div>
                             </form>
                           </div>
                           <div class="modal-footer">
                             <v-btn color="red" data-bs-dismiss="modal"> 关闭 </v-btn>
-                            <v-btn
-                              color="green"
-                              @click="updateBot(bot)"
-                              data-bs-dismiss="modal"
-                            >
+                            <v-btn color="green" @click="updateBot(bot)" data-bs-dismiss="modal">
                               保存
                             </v-btn>
                           </div>
@@ -246,9 +160,9 @@
                       </div>
                     </div>
 
-                    <el-button @click="removeBot(bot.bid)" type="danger" plain
-                      ><el-icon> <Delete /> </el-icon>删除</el-button
-                    >
+                    <el-button @click="removeBot(bot.bid)" type="danger" plain><el-icon>
+                        <Delete />
+                      </el-icon>删除</el-button>
                   </td>
                 </tr>
               </tbody>
@@ -274,8 +188,8 @@ export default {
     ace.config.set(
       "basePath",
       "https://cdn.jsdelivr.net/npm/ace-builds@" +
-        require("ace-builds").version +
-        "/src-noconflict/"
+      require("ace-builds").version +
+      "/src-noconflict/"
     );
 
     // const store = useStore();
@@ -382,4 +296,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

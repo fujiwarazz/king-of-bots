@@ -5,11 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.kob.MatchClient;
 import com.kob.constant.GameConstant;
 import com.kob.gamecore.Game;
+import com.kob.mapper.BotMapper;
 import com.kob.mapper.RecordsMapper;
 import com.kob.mapper.UserMapper;
 import com.kob.model.ResponseResult;
 import com.kob.model.dto.MatchingDto;
 import com.kob.model.dto.PlayerMatchDto;
+import com.kob.model.entity.Bot;
 import com.kob.model.entity.User;
 import com.kob.util.Base64Utils;
 import lombok.extern.slf4j.Slf4j;
@@ -44,11 +46,13 @@ public class Consumer {
 
     public static RecordsMapper recordsMapper;
 
+    public static BotMapper botMapper;
+
     private Session session = null;
 
     private User user;
 
-    private Game game = null;
+    public Game game = null;
 
     public static RestTemplate restTemplate;
 
@@ -85,6 +89,11 @@ public class Consumer {
     @Autowired
     public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
         Consumer.stringRedisTemplate = stringRedisTemplate;
+    }
+
+    @Autowired
+    public void setBotMapper(BotMapper botMapper) {
+        Consumer.botMapper = botMapper;
     }
 
 
@@ -126,7 +135,6 @@ public class Consumer {
         log.info("用户关闭连接,session为:[{}]", session.getId());
         if (this.user != null) {
             USERS_LINK.remove(this.user.getId());
-//            MATCHING_POOL.remove(this.user);
         }
     }
 
@@ -136,7 +144,7 @@ public class Consumer {
         MatchingDto matchingDto = JSON.parseObject(message, MatchingDto.class);
         System.out.println(matchingDto.getEvent());
         if (GameConstant.START_MATCHING.equals(matchingDto.getEvent())) {
-            handleMatching();
+            handleMatching(matchingDto.getBId(),matchingDto.getType());
         } else if (GameConstant.END_MATCHING.equals(matchingDto.getEvent())) {
             stopMatching();
         } else if (GameConstant.MOVE.equals(matchingDto.getEvent())) {
@@ -148,18 +156,40 @@ public class Consumer {
     private void move(Integer direction) {
         if (game.getPlayerA().getId().equals(this.user.getId())) {
             log.info("A:当前线程为:[{}]", Thread.currentThread().getId());
-            game.setNextStepA(direction);
+            //屏蔽bot输入
+            System.out.println(game.getPlayerA().getBot().getBId());
+
+            if(game.getPlayerA().getBot().getBId()==-1L){
+                game.setNextStepA(direction);
+            }
         } else if (game.getPlayerB().getId().equals(this.user.getId())) {
             log.info("B:当前线程为:[{}]", Thread.currentThread().getId());
-            game.setNextStepB(direction);
+            System.out.println(game.getPlayerA().getBot().getBId());
+            if(game.getPlayerB().getBot().getBId()==-1L){
+                game.setNextStepB(direction);
+            }
         }
     }
 
-    public static void startGame(Long id1, Long id2) {
+    public static void startGame(Long id1, Long id2,Long user1Bid,Long user2Bid) {
         User a = userMapper.selectById(id1);
         User b = userMapper.selectById(id2);
+        Bot botA = new Bot();
+        Bot botB = new Bot();
+        botA.setBCode("");
+        botB.setBCode("");
+        if(user1Bid!=-1L){
+            botA = botMapper.selectById(user1Bid);
+        }else{
+            botA.setBId(-1L);
+        }
+        if(user2Bid!=-1L){
+            botB = botMapper.selectById(user2Bid);
+        }else{
+            botB.setBId(-1L);
+        }
         //生成地图
-        Game game = new Game(13, 14, 30, a.getId(), b.getId());
+        Game game = new Game(13, 14, 30, a.getId(), b.getId(),botA,botB);
         game.createGameMap();
 
         if(USERS_LINK.get(a.getId())!=null){
@@ -167,7 +197,6 @@ public class Consumer {
         }
         if(USERS_LINK.get(b.getId())!=null){
             USERS_LINK.get(b.getId()).game = game;
-
         }
 
         log.info("game开始");
@@ -215,11 +244,18 @@ public class Consumer {
     }
 
 
-    private void handleMatching() {
+    /**
+     *
+     * @param botId 选择的botId ,如果为1则是自己
+     * @param matchType 选择的模式 -1：AI 1：只能匹配 2：随机匹配
+     */
+    private void handleMatching(Long botId,Integer matchType) {
         System.out.println("开始匹配");
         PlayerMatchDto playerMatchDto = new PlayerMatchDto();
         playerMatchDto.setUserId(this.user.getId());
         playerMatchDto.setRating(this.user.getRating());
+        playerMatchDto.setBId(botId);
+        playerMatchDto.setMatchType(matchType);
         restTemplate.postForObject(REMOTE_ADD_PLAYER_URL,playerMatchDto, ResponseResult.class);
     }
 

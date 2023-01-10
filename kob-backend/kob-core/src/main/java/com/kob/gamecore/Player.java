@@ -1,5 +1,6 @@
 package com.kob.gamecore;
 
+import com.kob.model.entity.Bot;
 import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class Player {
     private Integer sx;
     private Integer sy;
     private List<Integer> step;
-
+    private Bot bot;
     public boolean isSnakeTailIncreasing(int step) {
         if (step < 10) {
             return true;

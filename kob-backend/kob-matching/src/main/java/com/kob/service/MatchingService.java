@@ -9,7 +9,7 @@ import com.kob.model.ResponseResult;
 */
 public interface MatchingService {
 
-    ResponseResult<?> addPlayer(Long userId, Integer rating);
+    ResponseResult<?> addPlayer(Long userId, Integer rating,Long bid,Integer matchType);
 
     ResponseResult<?>removePlayer(Long userId);
 }
