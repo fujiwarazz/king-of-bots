@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kob.mapper.UserMapper">
 
+
+    <select id="getList" resultType="com.kob.model.vo.RecordsVo">
+        select * from kob.k_records as kr
+            left join kob.k_user as ku on kr.a_id = ku.k_id or kr.b_id = ku.k_id
+        <where>
+            <if test="pageDto.nickname!=null">
+                and ku.k_nickname = #{pageDto.nickname}
+            </if>
+        </where>
+    </select>
 </mapper>

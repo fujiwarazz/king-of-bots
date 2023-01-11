@@ -1,7 +1,10 @@
 package com.kob.service;
 
+import com.kob.model.dto.RecordsPageDto;
 import com.kob.model.entity.Records;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kob.util.ResponseResult;
+import org.springframework.data.domain.PageRequest;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IRecordsService extends IService<Records> {
 
+    ResponseResult<?> getRecordsPage(RecordsPageDto pageDto);
 }

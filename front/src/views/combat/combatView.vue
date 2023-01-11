@@ -14,6 +14,7 @@
 import matchFiled from '@/components/matchFiled.vue'
 import playgroundFieldVue from '@/components/playgroundField.vue';
 import resultBoard from '@/components/resultBorad.vue'
+import { ElMessage } from 'element-plus';
 import { onMounted, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 export default {
@@ -27,6 +28,8 @@ export default {
     let socketUrl = `ws://127.0.0.1:9999/ws/${store.state.user.token}`;
 
     store.commit('updateLoser','none')
+    store.commit('updateRecord',false)
+    
     let socket = null
     onMounted(() => {
 
@@ -54,11 +57,20 @@ export default {
             opponent_avatar: res.opponent_avatar
 
           })
+         setTimeout(()=>{
+          if(res.gameMap.a_id==store.state.user.userId){
+            ElMessage.info("你将出生在蓝色方")
+          
+          }else{
+            ElMessage.info("你将出生在红色方")
+
+          }
+         },100)
           store.commit("updateGameMap", res.gameMap)
 
           setTimeout(() => {
             store.commit("updateStatus", "playing")
-          }, 500)
+          }, 1500)
           console.log(res.gameMap)
         } else if (res.event === "end-matching") {
           store.commit("updateOpponent", {

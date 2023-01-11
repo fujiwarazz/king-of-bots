@@ -92,20 +92,45 @@ export class GameMap extends GameObject {
   
     //canvas监听输入    
     add_listener_events(){
-        this.ctx.canvas.focus();
-        this.ctx.canvas.addEventListener("keydown",e=>{
-            let d = -1;
-            if(e.key=='w') d=0;
-            else if(e.key =='d') d=1;
-            else if(e.key=='s') d=2;
-            else if(e.key=='a') d=3;
-            if(d>=0 && d<=3){
-                store.state.combat.socket.send(JSON.stringify({
-                    event:'move',
-                    direction:d
-                }))
-            }
-        });
+        if(store.state.record.is_record){
+            let k = 0
+            let astep = store.state.record.a_steps
+            let bstep = store.state.record.b_steps
+            console.log(astep)
+
+            const [snake0,snake1] = this.snakes
+            let st = setInterval(()=>{
+                if(k>=astep.length-1){
+                    if(store.state.record.record_loser=='A' || store.state.record.record_loser=='all'){
+                        snake0.status = 'die'
+                    }
+                    if(store.state.record.record_loser=='B' || store.state.record.record_loser=='all'){
+                        snake1.status = 'die'
+                    }
+                    clearInterval(st)
+                }else{
+                    snake0.set_direction(parseInt(astep[k]))
+                    snake1.set_direction(parseInt(bstep[k]))
+                    k++
+                }
+            },300)
+        }else{
+            this.ctx.canvas.focus();
+            this.ctx.canvas.addEventListener("keydown",e=>{
+                let d = -1;
+                if(e.key=='w') d=0;
+                else if(e.key =='d') d=1;
+                else if(e.key=='s') d=2;
+                else if(e.key=='a') d=3;
+                if(d>=0 && d<=3){
+                    store.state.combat.socket.send(JSON.stringify({
+                        event:'move',
+                        direction:d
+                    }))
+                }
+            });
+        }
+        
     }
 
     //让两条蛇进入下一步

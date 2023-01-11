@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import dashbord from '@/views/dashbord/dashbordView.vue'
 import combat from '@/views/combat/combatView.vue'
 import record from '@/views/record/recordView.vue'
+import recordContent from '@/views/record/recordContent.vue'
+
 import rank from '@/views/rank/rankView.vue'
 import userBot from '@/views/user/bots/botsView.vue'
 import userProfile from '@/views/user/profile/profileView.vue'
@@ -47,6 +49,15 @@ const routes = [
     }
   },
   {
+    path: '/record/:recordId/',
+    name: 'recordContent',
+    component: recordContent,
+    meta: {
+      needLogin:false
+    }
+  },
+  
+  {
     path: '/rank',
     name: 'rank',
     component: rank,
@@ -86,7 +97,6 @@ const routes = [
       needLogin:false
     }
   },
-
   {
     path: '/404',
     name: 'not found',

@@ -44,4 +44,6 @@ public class User implements Serializable {
     @TableField("rating")
     private Integer rating;
 
+    private String color;
+
 }

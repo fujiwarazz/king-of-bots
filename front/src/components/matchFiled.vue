@@ -11,8 +11,8 @@
                 </div>
                 <div class="user-select">
                     <select class="form-select" v-model="selected_id" aria-label="Default select example">
-                        <option selected  value="-1">亲自上阵</option>
-                        <option selected v-for='bot in myBots' :key="bot.bid" :value="bot.bid">{{ bot.btitle }}</option>
+                        <option selected="selected"  value="-1">亲自上阵</option>
+                        <option v-for='bot in myBots' :key="bot.bid" :value="bot.bid">{{ bot.btitle }}</option>
                     </select>
                 </div>
             </div>
@@ -29,10 +29,10 @@
                     {{ $store.state.combat.opponent_nickname }}
                 </div>
                 <div class="user-select">
-                    <select v-model="selected_mode" class="form-select" aria-label="Default select example">
+                    <select v-model="selected_mode"  class="form-select" aria-label="Default select example">
                         <option selected value="-1">选择AI</option>
-                        <option selected value="1">智能匹配</option>
-                        <option selected value="2">随机匹配</option>
+                        <option  value="1">智能匹配</option>
+                        <option  value="2">随机匹配</option>
                     </select>
                 </div>  
             </div>

@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.kob.model.dto.BotRunningDto;
 import com.kob.model.entity.Bot;
 import com.kob.model.entity.Records;
+import com.kob.model.entity.User;
 import com.kob.websocket.Consumer;
 import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import com.kob.util.ResponseResult;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -268,7 +270,8 @@ public class Game extends Thread {
 
     }
 
-    private void saveToDb() {
+    @Transactional
+    public void saveToDb() {
         Records records = new Records();
         records.setAId(playerA.getId());
         records.setBId(playerB.getId());
@@ -280,7 +283,38 @@ public class Game extends Thread {
         records.setMap(getMapString(this.gameMap));
         records.setASteps(getStepsString(playerA.getStep()));
         records.setBSteps(getStepsString(playerB.getStep()));
+        //更新rating
+        User A = Consumer.userMapper.selectById(playerA.getId());
+        User B = Consumer.userMapper.selectById(playerB.getId());
+        if("A".equals(this.loser)){
+            A.setRating(A.getRating()-20);
+            B.setRating(B.getRating()+50);
+            handleRatingColorChange(A);
+            handleRatingColorChange(B);
+            Consumer.userMapper.updateById(A);
+            Consumer.userMapper.updateById(B);
+        }else{
+            A.setRating(A.getRating()+50);
+            B.setRating(B.getRating()-20);
+            Consumer.userMapper.updateById(A);
+            Consumer.userMapper.updateById(B);
+        }
+
         Consumer.recordsMapper.insert(records);
+    }
+
+    private void handleRatingColorChange(User user) {
+        if(user.getRating()>=0 && user.getRating()<=1500){
+            user.setColor("#808080");
+        }else if(user.getRating()>1500 && user.getRating()<=1700){
+            user.setColor("#03a89e");
+        }else if(user.getRating()>1700 && user.getRating()<=2000){
+            user.setColor("#aa00aa");
+        }else if(user.getRating()>2000 && user.getRating()<=3000){
+            user.setColor("#ff8c00");
+        }else {
+            user.setColor("#ff0000");
+        }
     }
 
     private String getMapString(int[][] gameMap) {
@@ -372,5 +406,13 @@ public class Game extends Thread {
                 break;
             }
         }
+    }
+
+    public static void main(String[] args) {
+
+        int base = 7000;
+        double a = 10000;
+
+        System.out.println(Math.log1p(base)*(1000-(base/100))); //3.17 3.30 3.39
     }
 }
